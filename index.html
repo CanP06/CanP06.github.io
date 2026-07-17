@@ -4,6 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Baran Can Pala — Kimya Mühendisi</title>
+<meta name="description" content="Baran Can Pala — Kimya Mühendisi. Proses tasarımı, yüzey ve kaplama teknolojileri, üretim mühendisliği üzerine portfolyo: projeler, deneyim ve vizyon.">
+<meta name="author" content="Baran Can Pala">
+<meta name="theme-color" content="#101216">
+<link rel="canonical" href="https://canp06.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://canp06.github.io/">
+<meta property="og:title" content="Baran Can Pala — Kimya Mühendisi">
+<meta property="og:description" content="Proses tasarımı, yüzey &amp; kaplama teknolojileri ve üretim mühendisliği portfolyosu.">
+<meta property="og:image" content="https://canp06.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Baran Can Pala — Kimya Mühendisi">
+<meta name="twitter:description" content="Proses tasarımı, yüzey &amp; kaplama teknolojileri ve üretim mühendisliği portfolyosu.">
+<meta name="twitter:image" content="https://canp06.github.io/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,8 88,29 88,71 50,92 12,71 12,29' fill='none' stroke='%231E3AC4' stroke-width='9'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Baran Can Pala","jobTitle":"Chemical Engineer","url":"https://canp06.github.io/","email":"mailto:baranpala06@icloud.com","alumniOf":{"@type":"CollegeOrUniversity","name":"Hacettepe University"},"sameAs":["https://www.linkedin.com/in/baran-can-pala-b84ab8254/"]}
+</script>
+<noscript><style>.page{display:block!important}.cine-stage{height:auto!important}.cine-sticky{position:static!important;height:auto!important}.scene{position:static!important;opacity:1!important}.rv,.rv-scale{opacity:1!important;transform:none!important}#mol3d,#bgfx{display:none}</style></noscript>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -389,6 +412,21 @@
   }
   .reel-btn:hover{border-color:var(--paper);}
   .reel-note{margin-top:14px;font-size:10.5px;letter-spacing:.12em;color:var(--steel);text-transform:uppercase;text-align:center;}
+
+  ::selection{background:var(--cobalt);color:var(--paper);}
+  @media print{
+    header.top,#bgfx,footer.mini,.reel-bar,.reel-cover,.lightbox,.wipe,.reel-vig,.scroll-hint{display:none!important;}
+    .cine-stage{height:auto;}
+    .cine-sticky{position:static;height:auto;overflow:visible;}
+    .cine-sticky::before{display:none;}
+    .scene{position:static;opacity:1!important;transform:none!important;filter:none!important;padding:20px 0;}
+    #mol3d{display:none;}
+    main{padding-top:0;}
+    .stats,.contact-hero{background:#fff!important;color:#000!important;}
+    .stat .lbl,.c-item .c-lbl{color:#555!important;}
+    .contact-hero h2 span{-webkit-text-stroke:0;color:#000;}
+    .proj,.about-block,.xp,.cert{break-inside:avoid;}
+  }
 
   /* reduced motion */
   @media (prefers-reduced-motion: reduce){
@@ -998,7 +1036,12 @@
     document.getElementById('btn-tr').classList.toggle('active', l==='tr');
     document.getElementById('btn-en').classList.toggle('active', l==='en');
     document.title = l==='tr' ? 'Baran Can Pala — Kimya Mühendisi' : 'Baran Can Pala — Chemical Engineer';
+    try{ localStorage.setItem('bcp-lang', l); }catch(e){}
   }
+  try{ if(localStorage.getItem('bcp-lang')==='en') setLang('en'); }catch(e){}
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden && rPlaying) reelToggle();
+  });
 
   /* ---------- tab pages ---------- */
   function showPage(id, anchor){
