@@ -317,6 +317,55 @@
     text-transform:uppercase;color:rgba(244,244,241,.75);
   }
 
+  /* ================= TANITIM REEL ================= */
+  .reel-wrap{max-width:980px;margin:0 auto;}
+  .reel{
+    position:relative;aspect-ratio:16/9;background:var(--ink);
+    border:2px solid var(--ink);overflow:hidden;color:var(--paper);
+  }
+  .reel::after{content:"";position:absolute;right:0;bottom:0;width:26px;height:26px;background:var(--cobalt);clip-path:polygon(100% 0,100% 100%,0 100%);z-index:7;}
+  #reelfx{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .rs{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;opacity:0;pointer-events:none;
+    transition:opacity .8s ease;padding:0 7%;z-index:3;
+  }
+  .rs.on{opacity:1;}
+  .rs .tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,1.3vw,13px);letter-spacing:.22em;color:var(--cobalt-2);text-transform:uppercase;margin-bottom:14px;}
+  .rs h3{font-family:'Archivo',sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(19px,4.4vw,52px);line-height:1.04;letter-spacing:-.02em;}
+  .rs h3 .em{color:var(--cobalt-2);}
+  .rs .sub{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,1.4vw,13px);letter-spacing:.18em;text-transform:uppercase;color:rgba(244,244,241,.62);margin-top:16px;}
+  .reel-cover{
+    position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:18px;cursor:pointer;
+    background:rgba(16,18,22,.45);transition:opacity .5s;
+  }
+  .reel-cover.hide{opacity:0;pointer-events:none;}
+  .play-btn{
+    width:clamp(64px,9vw,88px);height:clamp(64px,9vw,88px);border:2px solid var(--paper);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:rgba(244,244,241,.06);transition:transform .25s,background .25s,border-color .25s;
+  }
+  .play-btn svg{margin-left:5px;width:38%;height:auto;}
+  .reel-cover:hover .play-btn{transform:scale(1.08);background:var(--cobalt);border-color:var(--cobalt);}
+  .cvr-t{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,244,241,.85);}
+  .reel-bar{
+    position:absolute;left:0;right:0;bottom:0;z-index:6;display:flex;align-items:center;
+    gap:12px;padding:10px 14px;background:linear-gradient(transparent, rgba(16,18,22,.85));
+    opacity:0;transition:opacity .4s;
+  }
+  .reel.playing .reel-bar, .reel:hover .reel-bar{opacity:1;}
+  .reel-prog{flex:1;height:3px;background:rgba(244,244,241,.2);}
+  .reel-prog span{display:block;height:100%;width:0;background:var(--cobalt-2);}
+  .reel-time{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(244,244,241,.7);white-space:nowrap;}
+  .reel-btn{
+    background:none;border:1px solid rgba(244,244,241,.35);color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+    padding:5px 10px;cursor:pointer;text-transform:uppercase;
+  }
+  .reel-btn:hover{border-color:var(--paper);}
+  .reel-note{margin-top:14px;font-size:10.5px;letter-spacing:.12em;color:var(--steel);text-transform:uppercase;text-align:center;}
+
   /* reduced motion */
   @media (prefers-reduced-motion: reduce){
     #bgfx{display:none;}
@@ -345,6 +394,7 @@
     <button class="brand" onclick="showPage('giris')">B.C. PALA</button>
     <nav class="tabs" aria-label="Sayfalar / Pages">
       <button class="tab active" data-page="giris" onclick="showPage('giris')"><span data-l="tr">Giriş</span><span data-l="en">Home</span></button>
+      <button class="tab" data-page="tanitim" onclick="showPage('tanitim')"><span data-l="tr">Tanıtım</span><span data-l="en">Showreel</span></button>
       <button class="tab" data-page="projeler" onclick="showPage('projeler')"><span data-l="tr">Projeler</span><span data-l="en">Projects</span></button>
       <button class="tab" data-page="ozgecmis" onclick="showPage('ozgecmis')"><span data-l="tr">Özgeçmiş</span><span data-l="en">Résumé</span></button>
       <button class="tab" data-page="iletisim" onclick="showPage('iletisim')"><span data-l="tr">İletişim</span><span data-l="en">Contact</span></button>
@@ -466,6 +516,72 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ==================== PAGE: TANITIM ==================== -->
+<div class="page" id="page-tanitim">
+  <section>
+    <div class="wrap">
+      <div class="sec-head rv">
+        <h2><span data-l="tr">Tanıtım</span><span data-l="en">Showreel</span></h2>
+        <span class="idx mono">REEL — 01:04</span>
+      </div>
+      <div class="reel-wrap rv-scale">
+        <div class="reel" id="reel">
+          <canvas id="reelfx"></canvas>
+
+          <div class="rs" id="rs0">
+            <div class="tag"><span data-l="tr">TANITIM — 2026</span><span data-l="en">SHOWREEL — 2026</span></div>
+            <h3>BARAN CAN PALA</h3>
+            <div class="sub"><span data-l="tr">KİMYA MÜHENDİSİ</span><span data-l="en">CHEMICAL ENGINEER</span></div>
+          </div>
+          <div class="rs" id="rs1">
+            <h3><span data-l="tr">Kimya mühendisliği<br><span class="em">maddenin dilini</span> konuşur.</span><span data-l="en">Chemical engineering speaks<br><span class="em">the language of matter.</span></span></h3>
+          </div>
+          <div class="rs" id="rs2">
+            <h3><span data-l="tr">Molekülü <span class="em">prosese,</span><br>prosesi <span class="em">tesise</span> dönüştürür.</span><span data-l="en">It turns molecules into <span class="em">process,</span><br>and process into <span class="em">plants.</span></span></h3>
+          </div>
+          <div class="rs" id="rs3">
+            <div class="tag">01 — <span data-l="tr">YÜZEY &amp; KAPLAMA</span><span data-l="en">SURFACE &amp; COATING</span></div>
+            <h3><span data-l="tr">Malzemeyi <span class="em">koruyan</span> yüzeyler.</span><span data-l="en">Surfaces that <span class="em">protect</span> the material.</span></h3>
+            <div class="sub"><span data-l="tr">KAPLAMA · KOROZYON · YÜZEY İŞLEME</span><span data-l="en">COATING · CORROSION · SURFACE TREATMENT</span></div>
+          </div>
+          <div class="rs" id="rs4">
+            <div class="tag">02 — <span data-l="tr">TESİS TASARIMI</span><span data-l="en">PLANT DESIGN</span></div>
+            <h3><span data-l="tr">Fikirden fizibiliteye,<br><span class="em">bütün bir tesis.</span></span><span data-l="en">From idea to feasibility —<br><span class="em">an entire plant.</span></span></h3>
+            <div class="sub">PFD · P&amp;ID · <span data-l="tr">EKİPMAN</span><span data-l="en">EQUIPMENT</span> · 3D</div>
+          </div>
+          <div class="rs" id="rs5">
+            <div class="tag">03 — <span data-l="tr">ÜRETİM</span><span data-l="en">PRODUCTION</span></div>
+            <h3><span data-l="tr">Akışı gör,<br><span class="em">dengeyi kur.</span></span><span data-l="en">See the flow,<br><span class="em">build the balance.</span></span></h3>
+            <div class="sub"><span data-l="tr">KAPASİTE · AKIŞ · SÜREKLİ İYİLEŞTİRME</span><span data-l="en">CAPACITY · FLOW · CONTINUOUS IMPROVEMENT</span></div>
+          </div>
+          <div class="rs" id="rs6">
+            <h3><span data-l="tr">Vizyonum:<br><span class="em">üretim süreçlerini tasarlayan</span><br>tarafta olmak.</span><span data-l="en">My vision:<br>to be on the side that<br><span class="em">designs production processes.</span></span></h3>
+          </div>
+          <div class="rs" id="rs7">
+            <h3><span data-l="tr">PROSESTEN<br><span class="em">ÜRETİME.</span></span><span data-l="en">FROM PROCESS<br><span class="em">TO PRODUCTION.</span></span></h3>
+            <div class="sub">canp06.github.io</div>
+          </div>
+
+          <div class="reel-cover" id="reelCover" onclick="reelToggle()">
+            <div class="play-btn"><svg width="26" height="30" viewBox="0 0 26 30" fill="none"><path d="M0 0 L26 15 L0 30 Z" fill="#F4F4F1"/></svg></div>
+            <div class="cvr-t" id="coverText"><span data-l="tr">TANITIMI OYNAT</span><span data-l="en">PLAY SHOWREEL</span></div>
+          </div>
+          <div class="reel-bar">
+            <button class="reel-btn" id="ppBtn" onclick="reelToggle(event)">II</button>
+            <div class="reel-prog"><span id="reelProg"></span></div>
+            <div class="reel-time" id="reelTime">00:00 / 01:04</div>
+            <button class="reel-btn" id="muteBtn" onclick="reelMute(event)"><span data-l="tr">SES: AÇIK</span><span data-l="en">SOUND: ON</span></button>
+          </div>
+        </div>
+        <p class="reel-note mono rv">
+          <span data-l="tr">Müzik dahil her sahne tarayıcıda gerçek zamanlı üretiliyor — Web Audio + Canvas.</span>
+          <span data-l="en">Every scene, music included, is generated live in the browser — Web Audio + Canvas.</span>
+        </p>
+      </div>
+    </div>
+  </section>
 </div>
 
 <!-- ==================== PAGE: PROJELER ==================== -->
@@ -878,6 +994,7 @@
     document.querySelectorAll('.tab').forEach(function(t){
       t.classList.toggle('active', t.dataset.page === id);
     });
+    if (typeof reelOnPageChange === 'function') reelOnPageChange(id);
     window.scrollTo({top:0, behavior:'auto'});
     requestAnimationFrame(function(){
       observeReveals();
@@ -1268,6 +1385,291 @@
     }
     loop();
   })();
+
+  /* ================= TANITIM REEL ENGINE ================= */
+  var REEL_SCENES = [6,8,8,8,8,8,10,8];
+  var REEL_TOTAL = REEL_SCENES.reduce(function(a,b){return a+b;},0);
+  var reelEl = document.getElementById('reel');
+  var reelFx = document.getElementById('reelfx');
+  var rCtx = reelFx ? reelFx.getContext('2d') : null;
+  var rPlaying=false, rEnded=false, rStart=0, rOffset=0, rRAF=null, rW=0, rH=0;
+  var PAPER='rgba(244,244,241,', COB='rgba(91,115,232,';
+
+  function reelSize(){
+    if(!reelFx) return;
+    var d = Math.min(window.devicePixelRatio||1,2);
+    rW = reelEl.clientWidth; rH = reelEl.clientHeight;
+    reelFx.width = rW*d; reelFx.height = rH*d;
+    rCtx.setTransform(d,0,0,d,0,0);
+  }
+  window.addEventListener('resize', function(){ if(reelFx && rW) reelSize(); });
+
+  /* --- scene visuals --- */
+  var cvPts=null;
+  function ensurePts(){
+    if(cvPts) return;
+    cvPts=[];
+    for(var i=0;i<90;i++){
+      var a=Math.random()*Math.PI*2, rr=Math.min(600,Math.max(rW,rH));
+      cvPts.push({sx:rW/2+Math.cos(a)*rr*(0.5+Math.random()*0.6),
+                  sy:rH/2+Math.sin(a)*rr*(0.5+Math.random()*0.6),
+                  ta:(i/90)*Math.PI*2, ph:Math.random()*Math.PI*2});
+    }
+  }
+  function hexPathAt(g,cx,cy,s,rot){
+    g.beginPath();
+    for(var k=0;k<6;k++){
+      var a=rot+k*Math.PI/3;
+      var x=cx+s*Math.cos(a), y=cy+s*Math.sin(a);
+      if(k===0) g.moveTo(x,y); else g.lineTo(x,y);
+    }
+    g.closePath();
+  }
+  function easeO(t){return 1-Math.pow(1-t,3);}
+
+  function drawScene(m,u,el){
+    var g=rCtx; g.clearRect(0,0,rW,rH);
+    var cx=rW/2, cy=rH/2, R=Math.min(rW,rH);
+    if(m===0){
+      ensurePts();
+      var e=easeO(Math.min(u*1.5,1)), ring=R*0.30;
+      for(var i=0;i<cvPts.length;i++){
+        var p=cvPts[i];
+        var tx=cx+Math.cos(p.ta+el*0.15)*ring, ty=cy+Math.sin(p.ta+el*0.15)*ring;
+        p.x=p.sx+(tx-p.sx)*e; p.y=p.sy+(ty-p.sy)*e;
+      }
+      g.lineWidth=1;
+      for(var a2=0;a2<cvPts.length;a2++)for(var b=a2+1;b<cvPts.length;b++){
+        var dx=cvPts[a2].x-cvPts[b].x, dy=cvPts[a2].y-cvPts[b].y, d=dx*dx+dy*dy;
+        if(d<3600){ g.strokeStyle=COB+((1-d/3600)*0.28)+')';
+          g.beginPath(); g.moveTo(cvPts[a2].x,cvPts[a2].y); g.lineTo(cvPts[b].x,cvPts[b].y); g.stroke(); }
+      }
+      for(var j=0;j<cvPts.length;j++){ g.beginPath(); g.arc(cvPts[j].x,cvPts[j].y,1.6,0,7); g.fillStyle=PAPER+'0.55)'; g.fill(); }
+      if(u>0.45){ g.strokeStyle=COB+(Math.min((u-0.45)*2,0.8))+')'; g.lineWidth=1.5;
+        hexPathAt(g,cx,cy,ring*0.55,el*0.15); g.stroke(); }
+    }
+    else if(m===1){
+      for(var h=0;h<8;h++){
+        var s=R*(0.06+0.05*((h*37)%5)), px=((h*0.137+0.06)%1)*rW, py=((h*0.29+el*0.012*(h%2?1:-1))%1+1)%1*rH;
+        g.strokeStyle=COB+(0.16*Math.min(u*3,1))+')'; g.lineWidth=1.3;
+        hexPathAt(g,px,py,s,el*0.2*(h%2?1:-1)); g.stroke();
+      }
+      for(var d2=0;d2<40;d2++){
+        var xx=((d2*0.267+el*0.008)%1)*rW, yy=((d2*0.71)%1)*rH+Math.sin(el+d2)*6;
+        g.beginPath(); g.arc(xx,yy,1.4,0,7); g.fillStyle=PAPER+(0.4*Math.min(u*3,1))+')'; g.fill();
+      }
+    }
+    else if(m===2){
+      var y=cy, seg=function(x1,x2,th){ if(u<th) return;
+        g.strokeStyle=COB+'0.6)'; g.lineWidth=1.6; g.setLineDash([7,7]); g.lineDashOffset=-el*40;
+        g.beginPath(); g.moveTo(x1,y); g.lineTo(x2,y); g.stroke(); g.setLineDash([]); };
+      var rev=function(th){return Math.min(Math.max((u-th)/0.14,0),1);};
+      seg(rW*0.06,rW*0.26,0.05);
+      var r1=rev(0.18); if(r1>0){ g.strokeStyle=PAPER+'0.9)'; g.lineWidth=1.6;
+        g.beginPath(); g.arc(rW*0.33,y,R*0.11*r1,0,7); g.stroke();
+        if(r1===1){ hexPathAt(g,rW*0.33,y,R*0.045,el*0.4); g.strokeStyle=COB+'0.85)'; g.stroke(); } }
+      seg(rW*0.40,rW*0.55,0.36);
+      var r2=rev(0.48); if(r2>0){ var chH=R*0.34*r2, chW=R*0.085;
+        g.strokeStyle=PAPER+'0.9)'; g.lineWidth=1.6;
+        g.strokeRect(rW*0.60,y-chH/2,chW,chH);
+        for(var tr=1;tr<4;tr++){ var ty2=y-chH/2+chH*tr/4;
+          g.beginPath(); g.moveTo(rW*0.60,ty2); g.lineTo(rW*0.60+chW,ty2); g.stroke(); } }
+      seg(rW*0.60+R*0.085,rW*0.86,0.72);
+      var r3=rev(0.82); if(r3>0){ g.fillStyle=COB+(0.85*r3)+')';
+        g.fillRect(rW*0.88,y-7,14,14); }
+    }
+    else if(m===3){
+      var sy=rH*0.70;
+      g.strokeStyle=PAPER+'0.85)'; g.lineWidth=2;
+      g.beginPath(); g.moveTo(rW*0.18,sy); g.lineTo(rW*0.82,sy); g.stroke();
+      g.lineWidth=1;
+      for(var hx=rW*0.18;hx<rW*0.82;hx+=14){ g.beginPath(); g.moveTo(hx,sy); g.lineTo(hx-7,sy+9); g.strokeStyle=PAPER+'0.3)'; g.stroke(); }
+      var P=1.7, ph=(el%P)/P, dropX=cx, drR=R*0.035;
+      var contact=0.52;
+      if(ph<contact){ var f=ph/contact; var dy2=rH*0.16+(sy-rH*0.16-drR)*f*f;
+        g.beginPath(); g.arc(dropX,dy2,drR,0,7); }
+      else{ var f2=(ph-contact)/(1-contact); var up=Math.sin(f2*Math.PI);
+        var dy3=sy-drR-up*rH*0.24; var sq=1-0.35*Math.max(0,1-f2*4);
+        g.save(); g.translate(dropX,dy3); g.scale(1/Math.sqrt(sq),Math.sqrt(sq));
+        g.beginPath(); g.arc(0,0,drR*(1-0.3*f2),0,7); g.restore(); }
+      g.fillStyle=COB+'0.9)'; g.fill();
+      g.strokeStyle=PAPER+'0.9)'; g.lineWidth=1.5; g.stroke();
+      var rip=(ph<contact)?-1:(ph-contact)/(1-contact);
+      if(rip>=0&&rip<0.7){ g.strokeStyle=COB+((0.5*(1-rip/0.7)))+')'; g.lineWidth=1.2;
+        g.beginPath(); g.ellipse(dropX,sy,drR*1.5+rip*R*0.12,(drR*1.5+rip*R*0.12)*0.22,0,0,7); g.stroke(); }
+    }
+    else if(m===4){
+      g.strokeStyle=PAPER+'0.9)'; g.lineWidth=1.5;
+      var r=function(th){return Math.min(Math.max((u-th)/0.2,0),1);};
+      var c1=r(0.02); if(c1>0){ var h1=R*0.42*c1;
+        g.strokeRect(rW*0.20,cy+R*0.24-h1,R*0.09,h1);
+        g.beginPath(); g.arc(rW*0.20+R*0.045,cy+R*0.24-h1,R*0.045,Math.PI,0); g.stroke();
+        for(var t4=1;t4<5;t4++){ var yy4=cy+R*0.24-h1+h1*t4/5;
+          g.beginPath(); g.moveTo(rW*0.20,yy4); g.lineTo(rW*0.20+R*0.09,yy4); g.stroke(); } }
+      var c2=r(0.28); if(c2>0){ g.beginPath(); g.arc(cx,cy+R*0.10,R*0.10*c2,0,7); g.stroke();
+        g.beginPath(); g.moveTo(cx-R*0.07,cy+R*0.24); g.lineTo(cx+R*0.07,cy+R*0.24); g.stroke(); }
+      var c3=r(0.52); if(c3>0){ var h3=R*0.30*c3;
+        g.strokeRect(rW*0.72,cy+R*0.24-h3,R*0.07,h3); }
+      var c4=r(0.74); if(c4>0){ g.strokeStyle=COB+(0.7*c4)+')'; g.setLineDash([6,6]); g.lineDashOffset=-el*30;
+        g.beginPath(); g.moveTo(rW*0.20+R*0.09,cy-R*0.05); g.lineTo(cx-R*0.10,cy-R*0.05); g.lineTo(cx-R*0.10,cy+R*0.06); g.stroke();
+        g.beginPath(); g.moveTo(cx+R*0.10,cy+R*0.10); g.lineTo(rW*0.72,cy+R*0.10); g.stroke();
+        g.setLineDash([]); }
+      if(u>0.85){ var pl=0.5+0.5*Math.sin(el*3);
+        [[rW*0.20+R*0.045,cy-R*0.05],[cx,cy+R*0.10],[rW*0.72+R*0.035,cy+R*0.10]].forEach(function(pt){
+          g.beginPath(); g.arc(pt[0],pt[1],3.2,0,7); g.fillStyle=COB+(0.5+0.4*pl)+')'; g.fill(); }); }
+    }
+    else if(m===5){
+      var y5=cy, st=[0.14,0.32,0.50,0.68,0.86];
+      g.strokeStyle=PAPER+'0.5)'; g.lineWidth=1.6;
+      g.beginPath(); g.moveTo(rW*0.08,y5); g.lineTo(rW*0.92,y5); g.stroke();
+      st.forEach(function(sx,i5){
+        var X=sx*rW;
+        g.beginPath(); g.arc(X,y5,R*0.045,0,7);
+        g.strokeStyle=PAPER+'0.9)'; g.lineWidth=1.6; g.stroke();
+        if(i5===2){ var pl2=0.5+0.5*Math.sin(el*3);
+          g.beginPath(); g.arc(X,y5,R*0.045+6+3*pl2,0,7);
+          g.strokeStyle=COB+(0.35+0.3*pl2)+')'; g.stroke(); }
+      });
+      for(var d5=0;d5<12;d5++){
+        var fx=((el*0.10+d5/12)%1);
+        var X2=rW*0.08+fx*rW*0.84;
+        g.beginPath(); g.arc(X2,y5,3,0,7);
+        g.fillStyle=(fx>0.5?COB+'0.95)':PAPER+'0.8)'); g.fill();
+      }
+    }
+    else if(m===6||m===7){
+      var fade=(m===7)?(1-u):Math.min(u*2.5,1);
+      for(var p6=0;p6<60;p6++){
+        var an=p6*0.618*Math.PI*2+el*0.05, rad=R*(0.12+((p6*97)%100)/100*0.4);
+        var X3=cx+Math.cos(an)*rad, Y3=cy+Math.sin(an)*rad*0.8-(m===7?u*rH*0.3:0);
+        g.beginPath(); g.arc(X3,Y3,1.5,0,7); g.fillStyle=PAPER+(0.4*fade)+')'; g.fill();
+      }
+      var pl3=0.5+0.5*Math.sin(el*1.6);
+      g.save(); g.shadowColor='rgba(91,115,232,0.9)'; g.shadowBlur=34;
+      g.strokeStyle=COB+((0.35+0.2*pl3)*fade)+')'; g.lineWidth=2;
+      g.beginPath(); g.arc(cx,cy,R*(m===7?0.30*(1-u)+0.02:0.30+0.012*pl3),0,7); g.stroke();
+      g.restore();
+    }
+  }
+
+  /* --- procedural soundtrack --- */
+  var AC=null, masterG=null, musicG=null, rMuted=false;
+  function startAudio(){
+    stopAudio();
+    try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+    masterG=AC.createGain(); masterG.gain.value=rMuted?0:0.85; masterG.connect(AC.destination);
+    musicG=AC.createGain(); musicG.gain.value=0; musicG.connect(masterG);
+    var delay=AC.createDelay(1); delay.delayTime.value=0.38;
+    var fb=AC.createGain(); fb.gain.value=0.32; delay.connect(fb); fb.connect(delay);
+    var wet=AC.createGain(); wet.gain.value=0.28; delay.connect(wet); wet.connect(musicG);
+    var t0=AC.currentTime+0.06;
+    musicG.gain.setValueAtTime(0,t0);
+    musicG.gain.linearRampToValueAtTime(1,t0+2.5);
+    musicG.gain.setValueAtTime(1,t0+REEL_TOTAL-6);
+    musicG.gain.linearRampToValueAtTime(0.0001,t0+REEL_TOTAL-0.3);
+    var chords=[[130.81,155.56,196.00],[103.83,130.81,155.56],[155.56,196.00,233.08],[116.54,146.83,174.61]];
+    var n=Math.ceil(REEL_TOTAL/4)+1;
+    for(var i=0;i<n;i++){ (function(fr,when){
+      var lp=AC.createBiquadFilter(); lp.type='lowpass'; lp.Q.value=0.7;
+      lp.frequency.setValueAtTime(480,when);
+      lp.frequency.linearRampToValueAtTime(950,when+2.6);
+      var gg=AC.createGain();
+      gg.gain.setValueAtTime(0.0001,when);
+      gg.gain.linearRampToValueAtTime(0.05,when+1.1);
+      gg.gain.setValueAtTime(0.05,when+3.0);
+      gg.gain.linearRampToValueAtTime(0.0001,when+4.25);
+      lp.connect(gg); gg.connect(musicG);
+      fr.forEach(function(f){ [-6,6].forEach(function(dt){
+        var o=AC.createOscillator(); o.type='sawtooth'; o.frequency.value=f; o.detune.value=dt;
+        o.connect(lp); o.start(when); o.stop(when+4.35);
+      });});
+      var sub=AC.createOscillator(); sub.type='sine'; sub.frequency.value=fr[0]/2;
+      var sg=AC.createGain();
+      sg.gain.setValueAtTime(0.0001,when);
+      sg.gain.linearRampToValueAtTime(0.09,when+0.7);
+      sg.gain.linearRampToValueAtTime(0.0001,when+4.2);
+      sub.connect(sg); sg.connect(musicG); sub.start(when); sub.stop(when+4.3);
+    })(chords[i%4], t0+i*4); }
+    var pent=[523.25,622.25,783.99,932.33,1046.5];
+    var tt=2.2;
+    while(tt<REEL_TOTAL-6){
+      (function(when){
+        var o=AC.createOscillator(); o.type='triangle';
+        o.frequency.value=pent[Math.floor(Math.random()*pent.length)];
+        var g2=AC.createGain();
+        g2.gain.setValueAtTime(0.0001,when);
+        g2.gain.linearRampToValueAtTime(0.045,when+0.02);
+        g2.gain.exponentialRampToValueAtTime(0.0001,when+0.9);
+        o.connect(g2); g2.connect(musicG); g2.connect(delay);
+        o.start(when); o.stop(when+1);
+      })(t0+tt);
+      tt+=0.5+Math.random()*0.9;
+    }
+  }
+  function stopAudio(){ if(AC){ try{AC.close();}catch(e){} AC=null; } }
+
+  /* --- transport --- */
+  function fmtT(s){ s=Math.max(0,Math.floor(s)); var m=Math.floor(s/60); var r=s%60;
+    return (m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
+  function reelElapsed(){ return rPlaying ? rOffset+(performance.now()-rStart)/1000 : rOffset; }
+  function reelTick(){
+    var el=reelElapsed();
+    if(el>=REEL_TOTAL){ reelFinish(); return; }
+    var acc=0, idx=0;
+    for(var i=0;i<REEL_SCENES.length;i++){ if(el<acc+REEL_SCENES[i]){ idx=i; break; } acc+=REEL_SCENES[i]; }
+    for(var s=0;s<REEL_SCENES.length;s++){
+      var n2=document.getElementById('rs'+s);
+      if(n2) n2.classList.toggle('on', s===idx);
+    }
+    var u=(el-acc)/REEL_SCENES[idx];
+    drawScene(idx,u,el);
+    document.getElementById('reelProg').style.width=(el/REEL_TOTAL*100)+'%';
+    document.getElementById('reelTime').textContent=fmtT(el)+' / '+fmtT(REEL_TOTAL);
+    rRAF=requestAnimationFrame(reelTick);
+  }
+  function reelFinish(){
+    rPlaying=false; rEnded=true; rOffset=REEL_TOTAL;
+    cancelAnimationFrame(rRAF);
+    reelEl.classList.remove('playing');
+    document.getElementById('reelProg').style.width='100%';
+    document.getElementById('coverText').innerHTML='<span data-l="tr">↻ TEKRAR İZLE</span><span data-l="en">↻ WATCH AGAIN</span>';
+    document.getElementById('reelCover').classList.remove('hide');
+    stopAudio();
+  }
+  function reelToggle(ev){
+    if(ev){ ev.stopPropagation(); }
+    if(!reelEl) return;
+    if(rPlaying){
+      rOffset=reelElapsed(); rPlaying=false;
+      cancelAnimationFrame(rRAF);
+      reelEl.classList.remove('playing');
+      document.getElementById('ppBtn').textContent='▶';
+      document.getElementById('coverText').innerHTML='<span data-l="tr">DEVAM ET</span><span data-l="en">RESUME</span>';
+      document.getElementById('reelCover').classList.remove('hide');
+      if(AC) AC.suspend();
+      return;
+    }
+    reelSize(); ensurePts();
+    if(rEnded || rOffset>=REEL_TOTAL){ rOffset=0; rEnded=false; startAudio(); }
+    else if(rOffset===0){ startAudio(); }
+    else if(AC){ AC.resume(); }
+    rPlaying=true; rStart=performance.now();
+    reelEl.classList.add('playing');
+    document.getElementById('ppBtn').textContent='II';
+    document.getElementById('reelCover').classList.add('hide');
+    rRAF=requestAnimationFrame(reelTick);
+  }
+  function reelMute(ev){
+    if(ev) ev.stopPropagation();
+    rMuted=!rMuted;
+    if(masterG) masterG.gain.value=rMuted?0:0.85;
+    document.getElementById('muteBtn').innerHTML=rMuted
+      ?'<span data-l="tr">SES: KAPALI</span><span data-l="en">SOUND: OFF</span>'
+      :'<span data-l="tr">SES: AÇIK</span><span data-l="en">SOUND: ON</span>';
+  }
+  function reelOnPageChange(id){
+    if(id!=='tanitim' && rPlaying) reelToggle();
+  }
 
   /* ---------- init ---------- */
   observeReveals();
