@@ -273,11 +273,6 @@
   .scene{z-index:2;}
   #sceneC{opacity:0;pointer-events:none;}
   #sceneA .kicker{margin-bottom:22px;}
-  .specimen{
-    position:absolute;left:clamp(20px,4vw,48px);bottom:74px;z-index:2;
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);
-    line-height:1.95;opacity:0;border-left:2px solid var(--cobalt);padding-left:13px;
-  }
   #sceneC{align-items:center;text-align:center;}
   #sceneC .mast2{
     font-family:'Archivo',sans-serif;font-weight:900;text-transform:uppercase;
@@ -403,7 +398,6 @@
     .scene{position:static;opacity:1!important;transform:none!important;filter:none!important;padding:56px 0;pointer-events:auto;}
     #mol3d{display:none;}
     .cine-sticky::before{display:none;}
-    .specimen{position:static;opacity:1;margin:18px auto 0;max-width:520px;}
     html{scroll-behavior:auto;}
     *,*::before,*::after{animation:none!important;transition:none!important;}
     .rv,.rv-scale{opacity:1!important;transform:none!important;}
@@ -444,11 +438,6 @@
     <div class="cine-sticky">
 
       <canvas id="mol3d" aria-hidden="true"></canvas>
-
-      <div class="specimen mono" id="specimen">
-        C₆H₆ — <span data-l="tr">BENZEN · AROMATİK HALKA</span><span data-l="en">BENZENE · AROMATIC RING</span><br>
-        <span data-l="tr">DELOKALİZE π-ELEKTRON SİSTEMİ</span><span data-l="en">DELOCALISED π-ELECTRON SYSTEM</span>
-      </div>
 
       <div class="scene" id="sceneA">
         <div class="wrap">
@@ -1080,7 +1069,6 @@
   var sceneA = document.getElementById('sceneA');
   var sceneC = document.getElementById('sceneC');
   var mastA = document.getElementById('mastA');
-  var specimen = document.getElementById('specimen');
   var molCanvas = document.getElementById('mol3d');
   var cineP = 0;
   function clamp01(v){ return Math.min(Math.max(v,0),1); }
@@ -1102,11 +1090,6 @@
     sceneA.style.pointerEvents = aOp > 0 ? 'auto' : 'none';
     mastA.style.transform = 'scale(' + (1 + a * 0.85) + ')';
     mastA.style.filter = 'blur(' + (Math.max(a - 0.5, 0) * 16) + 'px)';
-
-    /* Specimen label — appears while the molecule holds centre stage */
-    var sIn = clamp01((p - 0.36) / 0.08);
-    var sOut = 1 - clamp01((p - 0.60) / 0.08);
-    specimen.style.opacity = Math.min(sIn, sOut);
 
     /* Scene C — thesis line settles in, molecule recedes */
     var cIn = clamp01((p - 0.66) / 0.14);
