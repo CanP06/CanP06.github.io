@@ -968,46 +968,56 @@
   function closeLB(){ document.getElementById('lightbox').classList.remove('open'); }
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLB(); });
 
-  /* ---------- molecular background ---------- */
+  /* ---------- molecular background (scrolls with the page) ---------- */
   (function(){
     var c = document.getElementById('bgfx');
     if(!c || reduceMotion) return;
     var ctx = c.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var W, H, pts = [], hexs = [];
-    var N = window.innerWidth < 700 ? 26 : 44;
+    var W, VH, worldH = 0, pts = [], hexs = [];
     var LINK = 145;
 
+    function rebuild(force){
+      var h = Math.max(document.documentElement.scrollHeight, VH || window.innerHeight);
+      if(!force && Math.abs(h - worldH) < 240) return;
+      worldH = h;
+      var target = Math.max(30, Math.min(150, Math.round(W * worldH / 30000)));
+      if(W < 700) target = Math.min(target, 80);
+      pts = [];
+      for(var i=0;i<target;i++){
+        pts.push({
+          x:Math.random()*W, y:Math.random()*worldH,
+          vx:(Math.random()-.5)*.28, vy:(Math.random()-.5)*.28,
+          r:1.4+Math.random()*1.4
+        });
+      }
+      hexs = [];
+      var n = Math.max(3, Math.round(worldH/1100));
+      for(var k=0;k<n;k++){
+        hexs.push({
+          x:(k%2 ? 0.74 : 0.24)*W + (Math.random()-.5)*70,
+          y:(k+0.5)*(worldH/n),
+          s:70+Math.random()*90,
+          a:Math.random()*Math.PI,
+          va:(Math.random()>.5?1:-1)*0.0011
+        });
+      }
+    }
+
     function resize(){
-      W = window.innerWidth; H = window.innerHeight;
-      c.width = W * dpr; c.height = H * dpr;
+      W = window.innerWidth; VH = window.innerHeight;
+      c.width = W * dpr; c.height = VH * dpr;
       ctx.setTransform(dpr,0,0,dpr,0,0);
+      rebuild(true);
     }
     window.addEventListener('resize', resize); resize();
 
-    for(var i=0;i<N;i++){
-      pts.push({
-        x:Math.random()*W, y:Math.random()*H,
-        vx:(Math.random()-.5)*.28, vy:(Math.random()-.5)*.28,
-        r:1.4+Math.random()*1.4
-      });
-    }
-    for(var h=0;h<3;h++){
-      hexs.push({
-        x:(0.15+0.35*h)*W + Math.random()*80,
-        y:(0.2+0.28*h)*H,
-        s:70+Math.random()*90,
-        a:Math.random()*Math.PI,
-        va:(Math.random()>.5?1:-1)*0.0011
-      });
-    }
-
-    function drawHex(hx){
+    function drawHex(hx, oy){
       ctx.beginPath();
       for(var k=0;k<6;k++){
         var ang = hx.a + k*Math.PI/3;
         var px = hx.x + hx.s*Math.cos(ang);
-        var py = hx.y + hx.s*Math.sin(ang);
+        var py = hx.y - oy + hx.s*Math.sin(ang);
         if(k===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
       }
       ctx.closePath();
@@ -1016,37 +1026,45 @@
       ctx.stroke();
     }
 
+    var frame = 0;
     function tick(){
-      ctx.clearRect(0,0,W,H);
+      frame++;
+      if(frame % 90 === 0) rebuild(false); /* sayfa/sekme degisince yukseklige uyum */
+      ctx.clearRect(0,0,W,VH);
+      var oy = window.scrollY || window.pageYOffset || 0;
 
       for(var h=0;h<hexs.length;h++){
         hexs[h].a += hexs[h].va;
-        drawHex(hexs[h]);
+        var sy = hexs[h].y - oy;
+        if(sy > -220 && sy < VH + 220) drawHex(hexs[h], oy);
       }
 
-      for(var i=0;i<N;i++){
+      var vis = [];
+      for(var i=0;i<pts.length;i++){
         var p = pts[i];
         p.x += p.vx; p.y += p.vy;
         if(p.x < -20) p.x = W+20; if(p.x > W+20) p.x = -20;
-        if(p.y < -20) p.y = H+20; if(p.y > H+20) p.y = -20;
+        if(p.y < -20) p.y = worldH+20; if(p.y > worldH+20) p.y = -20;
+        var sy2 = p.y - oy;
+        if(sy2 > -LINK && sy2 < VH + LINK) vis.push(p);
       }
-      for(var a=0;a<N;a++){
-        for(var b=a+1;b<N;b++){
-          var dx = pts[a].x-pts[b].x, dy = pts[a].y-pts[b].y;
-          var d = Math.sqrt(dx*dx+dy*dy);
+      for(var a=0;a<vis.length;a++){
+        for(var b=a+1;b<vis.length;b++){
+          var dx = vis[a].x - vis[b].x, dy = vis[a].y - vis[b].y;
+          var d = Math.sqrt(dx*dx + dy*dy);
           if(d < LINK){
             ctx.beginPath();
-            ctx.moveTo(pts[a].x, pts[a].y);
-            ctx.lineTo(pts[b].x, pts[b].y);
+            ctx.moveTo(vis[a].x, vis[a].y - oy);
+            ctx.lineTo(vis[b].x, vis[b].y - oy);
             ctx.strokeStyle = 'rgba(30,58,196,' + ((1-d/LINK)*0.14).toFixed(3) + ')';
             ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
       }
-      for(var j=0;j<N;j++){
+      for(var j=0;j<vis.length;j++){
         ctx.beginPath();
-        ctx.arc(pts[j].x, pts[j].y, pts[j].r, 0, Math.PI*2);
+        ctx.arc(vis[j].x, vis[j].y - oy, vis[j].r, 0, Math.PI*2);
         ctx.fillStyle = 'rgba(16,18,22,0.28)';
         ctx.fill();
       }
